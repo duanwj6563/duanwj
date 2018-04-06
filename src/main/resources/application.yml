@@ -1,0 +1,46 @@
+#�໷������
+spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/test
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    filter: star
+    maxActive : 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+server:
+  port: 8080
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.ybl.demo.domain.model
+# ��ҳ���
+
+
+---
+spring:
+  profiles: test
+server:
+  port: 8081
+---
+spring:
+  profiles: prd
+server:
+  port: 80
+
+
