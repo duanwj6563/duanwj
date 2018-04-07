@@ -1,4 +1,4 @@
-#�໷������
+#多环境配置
 spring:
   profiles:
     active: dev
@@ -29,7 +29,7 @@ server:
 mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.ybl.demo.domain.model
-# ��ҳ���
+# 分页助手
 
 
 ---
