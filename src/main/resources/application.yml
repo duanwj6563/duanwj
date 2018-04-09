@@ -24,13 +24,14 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
+  jpa:
+    show-sql: true
 server:
   port: 8080
 mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.ybl.demo.domain.model
 # 分页助手
-
 
 ---
 spring:
