@@ -19,7 +19,7 @@ public class DataSourceConfigurer {
     @Bean(name = "primaryDataSource")//装配该方法返回值为yblDataSource管理bean
     @Qualifier("primaryDataSource")//spring装配bean唯一标识
     @ConfigurationProperties(prefix = "spring.datasource.primary")//application.yml文件内配置数据源的前缀
-    public DataSource primaryDataSource() {
+    public DruidDataSource primaryDataSource() {
 
         return new DruidDataSource();
     }
