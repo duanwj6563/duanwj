@@ -1,7 +1,9 @@
 package com.ybl.ports.rest.controller;
 
-import com.ybl.domain.User;
-import com.ybl.domain.repository.UserRepository;
+import com.ybl.domain.primary.model.User;
+import com.ybl.domain.primary.repository.UserRepository;
+import com.ybl.domain.secondary.model.Users;
+import com.ybl.domain.secondary.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +16,16 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserRepository userRepository;
-    @GetMapping
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @GetMapping(value = "/user")
     public List<User> hello() {
         return userRepository.findAll();
+    }
+
+    @GetMapping(value = "/users")
+    public List<Users> users() {
+        return usersRepository.findAll();
     }
 }
