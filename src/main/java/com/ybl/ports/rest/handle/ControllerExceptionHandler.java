@@ -3,8 +3,7 @@ package com.ybl.ports.rest.handle;
 import com.ybl.domain.exception.ExceptionReturn;
 import com.ybl.domain.exception.GlobalException;
 import com.ybl.domain.exception.UserDefinedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,28 +12,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
+@Slf4j
 public class ControllerExceptionHandler {
-    private final static Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(value = UserDefinedException.class)
     @ResponseBody
     public Object handleUserDefinedException(HttpServletRequest request, Exception e) {
-        logger.error("【系统异常 - UserDefinedException】{}", e);
-        logger.error("HTTP method : {}, URL : {} ,params : {}",request.getMethod(),request.getRequestURL(),request.getQueryString());
+        log.error("【系统异常 - UserDefinedException】{}", e);
+        log.error("HTTP method : {}, URL : {} ,params : {}",request.getMethod(),request.getRequestURL(),request.getQueryString());
         String className = e.getStackTrace()[0].getClassName();
         GlobalException ge = (GlobalException) e;
         ExceptionReturn er = new ExceptionReturn();
         BeanUtils.copyProperties(ge,er);
         er.setPath(request.getServletPath());
         er.setException(className);
-        logger.error("ExceptionInfo : {}", er);
+        log.error("ExceptionInfo : {}", er);
         return er;
     }
     @ExceptionHandler(value = Exception.class)
     public Object handleException(HttpServletRequest request, Exception e) {
-        logger.error("【系统异常 - Exception】{}", e);
-        logger.error("HTTP method : {}, URL : {} ,params : {}",request.getMethod(),request.getRequestURL(),request.getQueryString());
-        logger.error("ExceptionInfo : {}", e);
+        log.error("【系统异常 - Exception】{}", e);
+        log.error("HTTP method : {}, URL : {} ,params : {}",request.getMethod(),request.getRequestURL(),request.getQueryString());
+        log.error("ExceptionInfo : {}", e);
         return e;
     }
 }

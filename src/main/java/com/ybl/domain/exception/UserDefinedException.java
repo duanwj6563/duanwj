@@ -4,48 +4,52 @@ package com.ybl.domain.exception;
  * Created by duanwj on 18/04/09
  */
 public class UserDefinedException extends GlobalException {
-    private Integer status;
+    private Integer code;
 
     private String error;
 
-    private String message;
+    private String msg;
 
-    public UserDefinedException(){
+    public UserDefinedException() {
         super();
-        this.status = ServerStatus.DEFAULT_EXCEPTION.getStatus();
+        this.code = ServerStatus.DEFAULT_EXCEPTION.getCode();
         this.error = ServerStatus.DEFAULT_EXCEPTION.getMsg();
     }
-    public UserDefinedException(String msg){
+
+    public UserDefinedException(String msg) {
         super();
-        this.status = ServerStatus.DEFAULT_EXCEPTION.getStatus();
+        this.code = ServerStatus.DEFAULT_EXCEPTION.getCode();
         this.error = ServerStatus.DEFAULT_EXCEPTION.getMsg();
-        this.message = msg;
+        this.msg = msg;
     }
-    public UserDefinedException(ServerStatus ss){
+
+    public UserDefinedException(ServerStatus ss) {
         super();
-        this.status = ss.getStatus();
+        this.code = ss.getCode();
         this.error = ss.getMsg();
-        this.message = ss.getMsg();
+        this.msg = ss.getMsg();
     }
-    public UserDefinedException(ServerStatus ss, String msg){
+
+    public UserDefinedException(ServerStatus ss, String msg) {
         super();
-        this.status = ss.getStatus();
+        this.code = ss.getCode();
         this.error = ss.getMsg();
-        this.message = msg;
+        this.msg = msg;
     }
 
     @Override
-    public Integer getStatus() {
-        return this.status;
+    public Integer getCode() {
+        return this.code;
     }
 
-    @Override
-    public String getMessage() {
-        return this.message;
-    }
 
     @Override
     public String getError() {
         return this.error;
+    }
+
+    @Override
+    public String getMsg() {
+        return this.msg;
     }
 }

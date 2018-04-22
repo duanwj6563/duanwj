@@ -1,11 +1,10 @@
 package com.ybl.common;
 
-import com.ybl.domain.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.impl.DefaultClock;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -14,36 +13,45 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
+/**
+ * Created by duanwj on 2018/4/15 0015 10:30
+ */
 @Component
+@Slf4j
 public class JwtTokenUtil implements Serializable {
-
+    private static final long serialVersionUID = 6309474242441282480L;
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
-    private static final long serialVersionUID = 7263728837465338970L;
+    private Clock clock = DefaultClock.INSTANCE;
 
-    private String secret="ybl$$**&&";
+    @Value("${jwt.secret}")
+    private String secret;
 
-    private Long expiration=7200L;
+    @Value("${jwt.expiration}")
+    private Long expiration;
 
-    private Long criticalTime=3600L;
-    Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    @Value("${jwt.criticalTime}")
+    private Long criticalTime;
     /**
-     * 通过token获取用户名
+     * 获取token中用户名
      *
      * @param token
      * @return
      */
     public String getUsernameFromToken(String token) {
-        String username;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    /**
+     * 获取token中过期时间
+     *
+     * @param token
+     * @return
+     */
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
     }
 
     /**
@@ -52,51 +60,26 @@ public class JwtTokenUtil implements Serializable {
      * @param token
      * @return
      */
-    public Date getCreatedDateFromToken(String token) {
-        Date created;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
-        } catch (Exception e) {
-            created = null;
-        }
-        return created;
+    public Date getIssuedAtDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getIssuedAt);
     }
 
-    /**
-     * 获取token失效时间
-     *
-     * @param token
-     * @return
-     */
-    public Date getExpirationDateFromToken(String token) {
-        Date expiration;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
-        } catch (Exception e) {
-            expiration = null;
-        }
-        return expiration;
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
     }
 
-    /**
-     * 获取token中claims
-     *
-     * @param token
-     * @return
-     */
-    private Claims getClaimsFromToken(String token) {
-        Claims claims;
+    private Claims getAllClaimsFromToken(String token) {
         try {
-            claims = Jwts.parser()
+            return Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (Exception e) {
-            claims = null;
+        } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException ex) {
+            //todo 全局异常捕获
+            //throw new UserDefinedException(ServerStatus.TOKEN_INVALID);
+            throw new BadCredentialsException("Invalid JWT token: ", ex);
         }
-        return claims;
     }
 
     /**
@@ -122,19 +105,11 @@ public class JwtTokenUtil implements Serializable {
     /**
      * 创建jwtToken
      *
-     * @param user
      * @return
      */
-    public String generateToken(User user) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, user.getName());
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
-    }
-
-    public String generateToken() {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, "admin");
+        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }
@@ -146,9 +121,11 @@ public class JwtTokenUtil implements Serializable {
      * @return
      */
     String generateToken(Map<String, Object> claims) {
+        final Date createdDate = clock.now();
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
+                .setIssuedAt(createdDate)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
@@ -164,14 +141,10 @@ public class JwtTokenUtil implements Serializable {
         Date expiration = getExpirationDateFromToken(token);
         long time = (expiration.getTime() - new Date().getTime()) / 1000;
         if (Math.abs(time) < criticalTime) {
-            logger.info("【token是否过期时间间隔】{}秒", time);
-            try {
-                Claims claims = getClaimsFromToken(token);
-                claims.put(CLAIM_KEY_CREATED, new Date());
-                refreshedToken = generateToken(claims);
-            } catch (Exception e) {
-                refreshedToken = null;
-            }
+            log.info("【token是否过期时间间隔】{}秒", time);
+            Claims claims = getAllClaimsFromToken(token);
+            claims.put(CLAIM_KEY_CREATED, new Date());
+            refreshedToken = generateToken(claims);
         }
         return refreshedToken;
     }
@@ -186,14 +159,13 @@ public class JwtTokenUtil implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String username = getUsernameFromToken(token);
-        Date created = getCreatedDateFromToken(token);
+        Date created = getIssuedAtDateFromToken(token);
         Date expiration = getExpirationDateFromToken(token);
-        logger.info("【jwtToken有效期】{} ~ {}", formatter.format(created),formatter.format(expiration));
+        log.info("【jwtToken有效期】{} ~ {}", formatter.format(created), formatter.format(expiration));
         return (
                 username.equals(userDetails.getUsername())
                         && !isTokenExpired(token)
         );
     }
+    //todo 未完成refreshToken
 }
-
-

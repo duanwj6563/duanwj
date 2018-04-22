@@ -1,56 +1,70 @@
 #多环境配置
 spring:
   profiles:
-    active: dev
+    active: test
+---
+#--------------------------------------------------通用配置开始-------------------------------------------------#
+jwt:
+  header: Authorization
+  secret: duanwj
+  expiration: 1296000
+  criticalTime: 648000
+spring:
+  jpa:
+    database: mysql
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: none #生产环境慎用update create
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect  #不加这句则默认为myisam引擎
+#--------------------------------------------------通用配置结束-------------------------------------------------#
 ---
 spring:
   profiles: dev
   datasource:
     primary:
-      type: com.alibaba.druid.pool.DruidDataSource
-      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://duanwj:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       driver-class-name: com.mysql.jdbc.Driver
-      username: root
-      password: 123456
-      filter: star
-      maxActive : 20
-      initialSize: 1
-      maxWait: 60000
-      minIdle: 1
-      timeBetweenEvictionRunsMillis: 60000
-      minEvictableIdleTimeMillis: 300000
-      validationQuery: select 'x'
-      testWhileIdle: true
-      testOnBorrow: false
-      testOnReturn: false
-      poolPreparedStatements: true
-      maxOpenPreparedStatements: 20
+      username: ybl_lifecore
+      password: gsWW1ckBjLzR
     secondary:
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/lifecore?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://duanwj:3306/test1?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       driver-class-name: com.mysql.jdbc.Driver
-      username: root
-      password: 123456
-  jpa:
-    show-sql: true
-    hibernate:
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      username: ybl_lifecore
+      password: gsWW1ckBjLzR
 server:
-  port: 8080
-mybatis:
-  mapper-locations: classpath:mapping/*.xml
-  type-aliases-package: com.ybl.demo.domain.model
-# 分页助手
-
+   port: 8080
 ---
 spring:
   profiles: test
+  datasource:
+    primary:
+      jdbc-url: jdbc:mysql://duanwj:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      driver-class-name: com.mysql.jdbc.Driver
+      username: ybl_lifecore
+      password: gsWW1ckBjLzR
+    secondary:
+      jdbc-url: jdbc:mysql://duanwj:3306/lifecore?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      driver-class-name: com.mysql.jdbc.Driver
+      username: ybl_lifecore
+      password: gsWW1ckBjLzR
 server:
   port: 8081
 ---
 spring:
   profiles: prd
+  datasource:
+    primary:
+      jdbc-url: jdbc:mysql://duanwj:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      driver-class-name: com.mysql.jdbc.Driver
+      username: ybl_lifecore
+      password: gsWW1ckBjLzR
+    secondary:
+      jdbc-url: jdbc:mysql://duanwj:3306/test1?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      driver-class-name: com.mysql.jdbc.Driver
+      username: ybl_lifecore
+      password: gsWW1ckBjLzR
 server:
   port: 80
-
-

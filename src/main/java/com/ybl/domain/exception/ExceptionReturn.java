@@ -5,9 +5,9 @@ package com.ybl.domain.exception;
  * Created by duanwj on 18/04/09
  */
 public class ExceptionReturn {
-    private Integer status;//返回码
+    private Integer code;//返回码
     private String error;
-    private String message;//返回信息
+    private String msg;//返回信息
     private String path;
     private String exception;
     private Long timestamp;
@@ -17,37 +17,37 @@ public class ExceptionReturn {
     public static ExceptionReturn SUCCESS = new ExceptionReturn(ServerStatus.SUCCESS);
 
     public ExceptionReturn(ServerStatus serverStatus) {
-        this.status = serverStatus.getStatus();
+        this.code = serverStatus.getCode();
         this.error = serverStatus.getMsg();
-        this.message = serverStatus.getMsg();
+        this.msg = serverStatus.getMsg();
         this.timestamp = getTimestamp();
     }
 
     public ExceptionReturn() {
     }
 
-    public ExceptionReturn(Integer code, String error, String message) {
-        this.status = code;
+    public ExceptionReturn(Integer code, String error, String msg) {
+        this.code = code;
         this.error = error;
-        this.message = message;
+        this.msg = msg;
         this.timestamp = getTimestamp();
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getCode() {
+        return code;
     }
 
-    public ExceptionReturn setStatus(Integer status) {
-        this.status = status;
+    public ExceptionReturn setCode(Integer code) {
+        this.code = code;
         return this;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public ExceptionReturn setMessage(String message) {
-        this.message = message;
+    public ExceptionReturn setMsg(String msg) {
+        this.msg = msg;
         return this;
     }
 

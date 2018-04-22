@@ -5,8 +5,8 @@ package com.ybl.domain.exception;
  */
 public abstract class GlobalException extends RuntimeException {
 
-    public abstract Integer getStatus();
+    public abstract Integer getCode();
     public abstract String getError();
-    public abstract String getMessage();
+    public abstract String getMsg();
 
 }
