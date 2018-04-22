@@ -6,7 +6,7 @@ spring:
 #--------------------------------------------------通用配置开始-------------------------------------------------#
 jwt:
   header: Authorization
-  secret: duanwj
+  secret: 127.0.0.1
   expiration: 1296000
   criticalTime: 648000
 spring:
@@ -19,21 +19,24 @@ spring:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       ddl-auto: none #生产环境慎用update create
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect  #不加这句则默认为myisam引擎
+duanwj:
+  value: ${random.value} # 随机字符串
+  int: ${random.int} # 随机int
 #--------------------------------------------------通用配置结束-------------------------------------------------#
 ---
 spring:
   profiles: dev
   datasource:
     primary:
-      jdbc-url: jdbc:mysql://duanwj:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/primary?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       driver-class-name: com.mysql.jdbc.Driver
-      username: ybl_lifecore
-      password: gsWW1ckBjLzR
+      username: root
+      password: 123456
     secondary:
-      jdbc-url: jdbc:mysql://duanwj:3306/test1?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/secondary?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       driver-class-name: com.mysql.jdbc.Driver
-      username: ybl_lifecore
-      password: gsWW1ckBjLzR
+      username: root
+      password: 123456
 server:
    port: 8080
 ---
@@ -41,15 +44,15 @@ spring:
   profiles: test
   datasource:
     primary:
-      jdbc-url: jdbc:mysql://duanwj:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/primary?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       driver-class-name: com.mysql.jdbc.Driver
-      username: ybl_lifecore
-      password: gsWW1ckBjLzR
+      username: root
+      password: 123456
     secondary:
-      jdbc-url: jdbc:mysql://duanwj:3306/lifecore?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/secondary?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       driver-class-name: com.mysql.jdbc.Driver
-      username: ybl_lifecore
-      password: gsWW1ckBjLzR
+      username: root
+      password: 123456
 server:
   port: 8081
 ---
@@ -57,14 +60,14 @@ spring:
   profiles: prd
   datasource:
     primary:
-      jdbc-url: jdbc:mysql://duanwj:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/primary?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       driver-class-name: com.mysql.jdbc.Driver
-      username: ybl_lifecore
-      password: gsWW1ckBjLzR
+      username: root
+      password: 123456
     secondary:
-      jdbc-url: jdbc:mysql://duanwj:3306/test1?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/secondary?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
       driver-class-name: com.mysql.jdbc.Driver
-      username: ybl_lifecore
-      password: gsWW1ckBjLzR
+      username: root
+      password: 123456
 server:
   port: 80

@@ -7,10 +7,6 @@ import com.ybl.domain.exception.ServerStatus;
 import com.ybl.domain.exception.UserDefinedException;
 import com.ybl.domain.primary.model.SaleUser;
 import com.ybl.domain.primary.repository.SaleUserRepository;
-import com.ybl.domain.secondary.model.SmisSalesEntity;
-import com.ybl.domain.secondary.repository.SmisSalesRepository;
-import com.ybl.domain.secondary.repository.SmisTeamRepository;
-import com.ybl.domain.secondary.repository.SysBranchRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,12 +29,6 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private SaleUserRepository saleUserRepository;
     @Autowired
-    private SmisSalesRepository smisSalesRepository;
-    @Autowired
-    private SmisTeamRepository teamRepository;
-    @Autowired
-    private SysBranchRepository branchRepository;
-    @Autowired
     @Qualifier("jwtUserDetailsService")
     private UserDetailsService userDetailsService;
     @Autowired
@@ -50,10 +40,6 @@ public class AuthServiceImpl implements AuthService {
         SaleUser user = saleUserRepository.findByUsername(saleUser.getUsername());
         if (!ObjectUtils.isEmpty(user)) {
             throw new UserDefinedException(ServerStatus.NO_EXIST, "工号已经注册过了");
-        }
-        SmisSalesEntity salesEntity = smisSalesRepository.findBySalesIdAndSalesStatus(saleUser.getUsername(), "1");
-        if (ObjectUtils.isEmpty(salesEntity)) {
-            throw new UserDefinedException(ServerStatus.NO_EXIST, "工号不存在");
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = encoder.encode(saleUser.getPassword());
@@ -68,10 +54,6 @@ public class AuthServiceImpl implements AuthService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (BadCredentialsException e) {
             throw new UserDefinedException(ServerStatus.NO_EXIST, "用户名或密码错误");
-        }
-        SmisSalesEntity salesEntity = smisSalesRepository.findBySalesIdAndSalesStatus(username, "1");
-        if (ObjectUtils.isEmpty(salesEntity)) {
-            throw new UserDefinedException(ServerStatus.NO_EXIST, "销售人员已经离职");
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
