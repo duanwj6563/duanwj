@@ -1,7 +1,7 @@
 #多环境配置
 spring:
   profiles:
-    active: test
+    active: dev
 ---
 #--------------------------------------------------通用配置开始-------------------------------------------------#
 jwt:
@@ -22,6 +22,17 @@ spring:
 duanwj:
   value: ${random.value} # 随机字符串
   int: ${random.int} # 随机int
+# 暴露所有监控的接口
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+# 监控管理界面登陆用户名和密码
+security:
+  user: admin
+  password: admin
+
 #--------------------------------------------------通用配置结束-------------------------------------------------#
 ---
 spring:

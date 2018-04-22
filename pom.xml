@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.duanwj</groupId>
-    <artifactId>gitProject</artifactId>
+    <artifactId>baseProject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>gitProject</name>
+    <name>baseProject</name>
     <description>duanwj boot</description>
 
     <parent>
@@ -65,13 +65,13 @@
         </dependency>
         <!--省略model get和set方法-->
         <dependency>
-            <groupId>org.projectlombok </groupId>
+            <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
         <!--数据库连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
+            <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.9</version>
         </dependency>
         <!--spring security-->
@@ -86,11 +86,11 @@
             <version>0.9.0</version>
         </dependency>
         <!-- 分页插件-->
-       <!-- <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.1.2</version>
-        </dependency>-->
+        <!-- <dependency>
+             <groupId>com.github.pagehelper</groupId>
+             <artifactId>pagehelper-spring-boot-starter</artifactId>
+             <version>1.1.2</version>
+         </dependency>-->
         <!--api 文档-->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -102,10 +102,23 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.8.0</version>
         </dependency>
+        <!--jdbc-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+        <!-- 健康监控-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- ui-->
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_spring_boot</artifactId>
+            <version>0.3.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
