@@ -31,14 +31,14 @@
             <fileNamePattern>D:\logs\log\error.%d.log</fileNamePattern>
         </rollingPolicy>
     </appender>
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="consoleLog"/>
         <appender-ref ref="fileInfoLog"/>
         <appender-ref ref="fileErrorLog"/>
     </root>
     <!-- 开发环境下的日志配置 -->
     <springProfile name="dev">
-        <root level="debug">
+        <root level="info">
             <appender-ref ref="consoleLog"/>
             <appender-ref ref="fileInfoLog"/>
         </root>
