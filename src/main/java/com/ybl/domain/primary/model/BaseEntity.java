@@ -2,7 +2,9 @@ package com.ybl.domain.primary.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -24,11 +26,28 @@ public abstract class BaseEntity {
     @GeneratedValue
     @JsonIgnore
     private long id;// 主键
+    /**
+     * 创建时间
+     */
     @CreatedDate
     @JsonIgnore
     private Date createTime;
 
+    /**
+     * 修改时间
+     */
     @LastModifiedDate
     @JsonIgnore
     private Date updateTime;
+    /**
+     * 创建人
+     */
+    @CreatedBy
+    private String createdBy;
+    /**
+     * 修改人
+     */
+    @LastModifiedBy
+    private String lastmodifiedBy;
+
 }
