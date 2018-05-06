@@ -14,7 +14,7 @@ public enum ServerStatus {
     /*提示类型*/
     SUCCESS(200, "成功"),
     INFO_EXCEPTION(600, "逻辑错误"),
-    OPERATION_FAILED(601, "操作失败"),
+    OPERATION_FAILED(601, "请求不合法"),
     PARAM_EMPTY(602, "参数为空"),
     NO_EXIST(603, "资源不存在"),
 
