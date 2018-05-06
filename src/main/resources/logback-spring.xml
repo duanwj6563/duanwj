@@ -43,6 +43,13 @@
             <appender-ref ref="fileInfoLog"/>
         </root>
     </springProfile>
+    <!-- 测试环境下的日志配置 -->
+    <springProfile name="test">
+        <root level="debug">
+            <appender-ref ref="consoleLog"/>
+            <appender-ref ref="fileInfoLog"/>
+        </root>
+    </springProfile>
 
     <!-- 生产环境下的日志配置 -->
     <springProfile name="prd">
