@@ -5,11 +5,13 @@ import com.ybl.domain.exception.ServerStatus;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
+@ApiIgnore
 public class FinalExceptionHandler implements ErrorController {
 
     @Override
