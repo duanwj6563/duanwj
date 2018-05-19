@@ -45,7 +45,7 @@
     </springProfile>
     <!-- 测试环境下的日志配置 -->
     <springProfile name="test">
-        <root level="debug">
+        <root level="info">
             <appender-ref ref="consoleLog"/>
             <appender-ref ref="fileInfoLog"/>
         </root>

@@ -7,17 +7,16 @@ spring:
 jwt:
   header: Authorization
   secret: 127.0.0.1
-  expiration: 1296000
+  expiration: 60
   criticalTime: 648000
 spring:
   jpa:
     database: mysql
-    generate-ddl: true
     show-sql: true
     hibernate:
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-      ddl-auto: none #生产环境慎用update create
+      ddl-auto: update #生产环境慎用update create
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect  #不加这句则默认为myisam引擎
 duanwj:
   value: ${random.value} # 随机字符串
@@ -28,6 +27,7 @@ management:
     web:
       exposure:
         include: "*"
+        exclude: env,beans
 # 监控管理界面登陆用户名和密码
 security:
   user: admin

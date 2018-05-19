@@ -22,7 +22,7 @@ public class OperationAuditorConfig implements AuditorAware<String> {
             return null;
         }
         //todo 自动获取当前登录人信息
-        log.info("当前审计人{}",authentication.getName());
+        log.info("当前审计人{}", authentication.getName());
         return Optional.of(authentication.getPrincipal().toString());
     }
 }
